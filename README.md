@@ -14,8 +14,6 @@
 
 [Prefer to use Eloquent over using Query Builder and raw SQL queries. Prefer collections over arrays](#prefer-to-use-eloquent-over-using-query-builder-and-raw-sql-queries-prefer-collections-over-arrays)
 
-[Mass assignment](#mass-assignment)
-
 [Do not execute queries in Blade templates and use eager loading (N + 1 problem)](#do-not-execute-queries-in-blade-templates-and-use-eager-loading-n--1-problem)
 
 [Comment your code, but prefer descriptive method and variable names over comments](#comment-your-code-but-prefer-descriptive-method-and-variable-names-over-comments)
@@ -28,13 +26,9 @@
 
 [Follow Laravel naming conventions](#follow-laravel-naming-conventions)
 
-[Use shorter and more readable syntax where possible](#use-shorter-and-more-readable-syntax-where-possible)
-
 [Use IoC container or facades instead of new Class](#use-ioc-container-or-facades-instead-of-new-class)
 
 [Do not get data from the `.env` file directly](#do-not-get-data-from-the-env-file-directly)
-
-[Store dates in the standard format. Use accessors and mutators to modify date format](#store-dates-in-the-standard-format-use-accessors-and-mutators-to-modify-date-format)
 
 [Other good practices](#other-good-practices)
 
@@ -463,45 +457,6 @@ Trait | adjective | Notifiable | ~~NotificationTrait~~
 
 [🔝 Back to contents](#contents)
 
-### **Use shorter and more readable syntax where possible**
-
-Bad:
-
-```php
-$request->session()->get('cart');
-$request->input('name');
-```
-
-Good:
-
-```php
-session('cart');
-$request->name;
-```
-
-More examples:
-
-Common syntax | Shorter and more readable syntax
------------- | -------------
-`Session::get('cart')` | `session('cart')`
-`$request->session()->get('cart')` | `session('cart')`
-`Session::put('cart', $data)` | `session(['cart' => $data])`
-`$request->input('name'), Request::get('name')` | `$request->name, request('name')`
-`return Redirect::back()` | `return back()`
-`is_null($object->relation) ? null : $object->relation->id` | `optional($object->relation)->id`
-`return view('index')->with('title', $title)->with('client', $client)` | `return view('index', compact('title', 'client'))`
-`$request->has('value') ? $request->value : 'default';` | `$request->get('value', 'default')`
-`Carbon::now(), Carbon::today()` | `now(), today()`
-`App::make('Class')` | `app('Class')`
-`->where('column', '=', 1)` | `->where('column', 1)`
-`->orderBy('created_at', 'desc')` | `->latest()`
-`->orderBy('age', 'desc')` | `->latest('age')`
-`->orderBy('created_at', 'asc')` | `->oldest()`
-`->select('id', 'name')->get()` | `->get(['id', 'name'])`
-`->first()->name` | `->value('name')`
-
-[🔝 Back to contents](#contents)
-
 ### **Use IoC container or facades instead of new Class**
 
 new Class syntax creates tight coupling between classes and complicates testing. Use IoC container or facades instead.
@@ -546,32 +501,6 @@ Good:
 
 // Use the data
 $apiKey = config('api.key');
-```
-
-[🔝 Back to contents](#contents)
-
-### **Store dates in the standard format. Use accessors and mutators to modify date format**
-
-Bad:
-
-```php
-{{ Carbon::createFromFormat('Y-d-m H-i', $object->ordered_at)->toDateString() }}
-{{ Carbon::createFromFormat('Y-d-m H-i', $object->ordered_at)->format('m-d') }}
-```
-
-Good:
-
-```php
-// Model
-protected $dates = ['ordered_at', 'created_at', 'updated_at'];
-public function getSomeDateAttribute($date)
-{
-    return $date->format('m-d');
-}
-
-// View
-{{ $object->ordered_at->toDateString() }}
-{{ $object->ordered_at->some_date }}
 ```
 
 [🔝 Back to contents](#contents)
