@@ -271,24 +271,24 @@ Article::has('user.profile')->verified()->latest()->get();
 
 [🔝 Back to contents](#contents)
 
-### **Mass assignment**
+### **Do not use Mass assignment**
 
 Bad:
 
 ```php
-$article = new Article;
-$article->title = $request->title;
-$article->content = $request->content;
-$article->verified = $request->verified;
-// Add category to article
-$article->category_id = $category->id;
-$article->save();
+$category->article()->create($request->validated());
 ```
 
 Good:
 
 ```php
-$category->article()->create($request->validated());
+$article = new Article;
+
+$article->title = $request->title;
+$article->content = $request->content;
+$article->verified = $request->verified;
+
+$article->save();
 ```
 
 [🔝 Back to contents](#contents)
